@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --espresso: #291C0E;
+    --cacau: #6E473B;
+    --areia: #E1D4C2;
+    --fundo: #E9DFD0;
+    --papel: #FBF8F3;
+    --linha: #DDD1BF;
+    --texto-suave: #8A7461;
+    --latao: #C29A5B;
+    --ferrugem: #A2402F;
+    --ferrugem-claro: #F4DFD9;
+    --branco: #fff;
+
+    --fonte-titulo: 'Fraunces', Georgia, serif;
+    --fonte-texto: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fonte-texto);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--espresso);
+    background: var(--fundo);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+    outline: 2px solid var(--latao);
+    outline-offset: 2px;
+}
+
+/* ===== Estrutura: duas metades ===== */
+.pagina {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+/* ===== Lado esquerdo (marca) ===== */
+.lado {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 64px;
+    background-color: var(--espresso);
+    color: var(--areia);
+    overflow: hidden;
+}
+
+/* matriz de pontos discreta, como um registo de pessoas */
+.lado::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(225, 212, 194, 0.14) 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+}
+
+.lado-conteudo {
+    position: relative;
+    max-width: 440px;
+}
+
+.lado-titulo {
+    font-family: var(--fonte-titulo);
+    font-weight: 600;
+    font-size: 56px;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    color: var(--areia);
+}
+
+.lado-titulo::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin-top: 28px;
+    border-radius: 2px;
+    background: var(--latao);
+}
+
+.lado-texto {
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #C9BBA8;
+}
+
+/* ===== Lado direito (formulário) ===== */
+.painel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.cartao {
+    width: 100%;
+    max-width: 400px;
+    background: var(--papel);
+    border: 1px solid var(--linha);
+    border-radius: 18px;
+    padding: 40px 36px 36px;
+    box-shadow: 0 2px 4px rgba(41, 28, 14, 0.06), 0 30px 60px -28px rgba(41, 28, 14, 0.35);
+}
+
+.cartao-titulo {
+    font-family: var(--fonte-titulo);
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+}
+
+.cartao-sub {
+    margin: 4px 0 28px;
+    color: var(--texto-suave);
+}
+
+/* ===== Campos ===== */
+.campo {
+    margin-bottom: 18px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cacau);
+}
+
+.input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--linha);
+    border-radius: 10px;
+    background: var(--branco);
+    color: var(--espresso);
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.input:hover {
+    border-color: var(--latao);
+}
+
+.input:focus {
+    border-color: var(--cacau);
+    box-shadow: 0 0 0 4px rgba(110, 71, 59, 0.12);
+}
+
+/* ===== Botão ===== */
+.botao {
+    width: 100%;
+    height: 50px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 999px;
+    background: var(--cacau);
+    color: var(--branco);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(41, 28, 14, 0.25), 0 8px 18px -8px rgba(110, 71, 59, 0.8);
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.botao:hover {
+    background: var(--espresso);
+    transform: translateY(-1px);
+}
+
+.botao:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ===== Erro ===== */
+.erro {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: var(--ferrugem-claro);
+    border-left: 4px solid var(--ferrugem);
+    border-radius: 10px;
+    color: var(--ferrugem);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 860px) {
+    .pagina {
+        grid-template-columns: 1fr;
+    }
+
+    .lado {
+        padding: 36px 28px;
+        align-items: center;
+    }
+
+    .lado-titulo {
+        font-size: 34px;
+    }
+
+    .lado-titulo::after {
+        margin-top: 16px;
+    }
+
+    .lado-texto {
+        display: none;
+    }
+
+    .painel {
+        padding: 32px 16px 48px;
+    }
+}
+
+@media (max-width: 420px) {
+    .cartao {
+        padding: 30px 22px 26px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
+
+/* =========================================================
+   Tela principal
+   ========================================================= */
+.boasVindas {
+    margin-top: 6px;
+    color: var(--texto-suave);
+    font-size: 15px;
+}
+
+.cartoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.cartoes .cartao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 22px 24px;
+    background: var(--papel);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card);
+}
+
+.cartao .rotulo {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.cartao .numero {
+    font-family: var(--fonte-titulo);
+    font-size: 44px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--espresso);
+}
+
+.cartao a {
+    margin-top: 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cacau);
+    text-decoration: none;
+}
+
+.cartao a:hover {
+    color: var(--ferrugem);
+    text-decoration: underline;
+}

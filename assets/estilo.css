@@ -1,0 +1,812 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+/* =========================================================
+   Variáveis
+   ========================================================= */
+:root {
+    --espresso: #291C0E;
+    --cacau: #6E473B;
+    --areia: #E1D4C2;
+    --fundo: #E9DFD0;
+    --papel: #FBF8F3;
+    --linha: #DDD1BF;
+    --texto-suave: #8A7461;
+    --latao: #C29A5B;
+    --latao-claro: rgba(194, 154, 91, 0.18);
+    --ferrugem: #A2402F;
+    --ferrugem-claro: #F4DFD9;
+    --branco: #fff;
+
+    --fonte-titulo: 'Fraunces', Georgia, serif;
+    --fonte-texto: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --raio-card: 14px;
+    --raio: 9px;
+    --sombra-card: 0 1px 2px rgba(41, 28, 14, 0.06), 0 12px 32px -12px rgba(41, 28, 14, 0.18);
+    --sombra-modal: 0 2px 4px rgba(41, 28, 14, 0.1), 0 30px 70px -20px rgba(41, 28, 14, 0.5);
+    --transicao: 0.18s ease;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--fonte-texto);
+    font-size: 15px;
+    line-height: 1.55;
+    background: var(--fundo);
+    color: var(--espresso);
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+a,
+button,
+input,
+select {
+    transition: background var(--transicao), color var(--transicao),
+                border-color var(--transicao), box-shadow var(--transicao),
+                transform var(--transicao);
+}
+
+:focus-visible {
+    outline: 2px solid var(--latao);
+    outline-offset: 2px;
+}
+
+/* =========================================================
+   Menu lateral
+   ========================================================= */
+.navbar {
+    width: 240px;
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    overflow-y: auto;
+    background: var(--espresso);
+    color: var(--branco);
+    display: flex;
+    flex-direction: column;
+    padding: 36px 0 24px;
+}
+
+.marca {
+    padding: 0 28px 32px;
+}
+
+.marca .titulo {
+    font-family: var(--fonte-titulo);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: 0.2px;
+    color: var(--areia);
+}
+
+.marca .titulo::after {
+    content: "";
+    display: block;
+    width: 38px;
+    height: 3px;
+    margin-top: 16px;
+    border-radius: 2px;
+    background: var(--latao);
+}
+
+.navlinks {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 4px;
+    padding: 0 14px;
+}
+
+.navbar a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #C9BBA8;
+    text-decoration: none;
+    padding: 11px 14px;
+    font-size: 14.5px;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+.navbar a:hover {
+    background: rgba(225, 212, 194, 0.09);
+    color: var(--branco);
+}
+
+.navbar a.on {
+    background: var(--latao-claro);
+    color: var(--branco);
+    font-weight: 600;
+}
+
+/* marcador de cada item (substitui o span vazio) */
+.navbar .icone {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.35;
+    flex-shrink: 0;
+    transition: opacity var(--transicao), background var(--transicao), transform var(--transicao);
+}
+
+.navbar a:hover .icone {
+    opacity: 0.7;
+}
+
+.navbar a.on .icone {
+    background: var(--latao);
+    opacity: 1;
+    transform: scale(1.25);
+}
+
+.navbar .sair {
+    margin: 14px 14px 0;
+    color: #D9B5A6;
+    border: 1px solid rgba(225, 212, 194, 0.16);
+}
+
+.navbar .sair:hover {
+    background: var(--ferrugem);
+    border-color: var(--ferrugem);
+    color: var(--branco);
+}
+
+/* =========================================================
+   Área principal
+   ========================================================= */
+.mae {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cabecalho h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    color: var(--espresso);
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.caixa {
+    background: var(--papel);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card);
+    padding: 12px 20px 20px;
+    overflow-x: auto;
+}
+
+/* =========================================================
+   Pesquisa
+   ========================================================= */
+.busca input {
+    width: 270px;
+    max-width: 100%;
+    height: 44px;
+    padding: 0 16px 0 44px;
+    border: 1px solid var(--linha);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--espresso);
+    background-color: var(--papel);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238A7461' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 16px center;
+}
+
+.busca input::placeholder {
+    color: var(--texto-suave);
+}
+
+.busca input:focus {
+    outline: none;
+    border-color: var(--cacau);
+    background-color: var(--branco);
+    box-shadow: 0 0 0 4px rgba(110, 71, 59, 0.12);
+}
+
+/* =========================================================
+   Botões
+   ========================================================= */
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 24px;
+    background: var(--cacau);
+    color: var(--branco);
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(41, 28, 14, 0.25), 0 6px 14px -6px rgba(110, 71, 59, 0.7);
+}
+
+.botao:hover {
+    background: var(--espresso);
+    transform: translateY(-1px);
+}
+
+.botao:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* =========================================================
+   Tabela
+   ========================================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+thead th {
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--cacau);
+    padding: 18px 12px 14px;
+    border-bottom: 2px solid var(--areia);
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 16px 12px;
+    font-size: 14.5px;
+    border-bottom: 1px solid var(--linha);
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* só o email pode quebrar, e só quando for mesmo necessário */
+tbody td:nth-child(5) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-width: 170px;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr {
+    transition: background var(--transicao);
+}
+
+tbody tr:hover {
+    background: var(--branco);
+}
+
+tbody tr:hover td:first-child {
+    box-shadow: inset 3px 0 0 var(--latao);
+}
+
+/* ID: discreto, números alinhados */
+tbody td:first-child {
+    color: var(--texto-suave);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+/* nome em destaque */
+tbody td:nth-child(2) {
+    font-weight: 600;
+}
+
+.vazio {
+    text-align: center;
+    color: var(--texto-suave);
+    padding: 48px 16px;
+    font-family: var(--fonte-titulo);
+    font-size: 17px;
+}
+
+.coluna-id {
+    width: 72px;
+}
+
+.coluna-acao {
+    width: 290px;
+    white-space: nowrap;
+}
+
+/* etiqueta opcional para o perfil: <span class="perfil">OPERADOR</span> */
+.perfil {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--areia);
+    color: var(--cacau);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Botões de ação da tabela
+   ========================================================= */
+.acoes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.acoes a,
+.acoes button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: var(--raio);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.botao-atualizar {
+    color: var(--cacau);
+    background: transparent;
+    border-color: var(--linha);
+}
+
+.botao-atualizar:hover {
+    background: var(--cacau);
+    border-color: var(--cacau);
+    color: var(--branco);
+}
+
+.botao-remover {
+    color: var(--ferrugem);
+    background: var(--ferrugem-claro);
+}
+
+.botao-remover:hover {
+    background: var(--ferrugem);
+    color: var(--branco);
+}
+
+/* =========================================================
+   Modais
+   ========================================================= */
+.modalFundo {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(41, 28, 14, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 16px;
+}
+
+.modalFundo:target {
+    display: flex;
+    animation: aparecer 0.2s ease;
+}
+
+.modalFundo:target .modalCaixa {
+    animation: subir 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modalOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+}
+
+.modalCaixa {
+    position: relative;
+    background: var(--papel);
+    border-radius: 18px;
+    box-shadow: var(--sombra-modal);
+    padding: 32px;
+    width: 460px;
+    max-width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.modalTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 26px;
+}
+
+.modalTopo .titulo {
+    font-family: var(--fonte-titulo);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.modalFechar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    text-decoration: none;
+    color: var(--texto-suave);
+    font-size: 20px;
+    line-height: 1;
+    background: var(--areia);
+}
+
+.modalFechar:hover {
+    background: var(--cacau);
+    color: var(--branco);
+}
+
+/* =========================================================
+   Formulários
+   ========================================================= */
+.campo {
+    margin-bottom: 18px;
+}
+
+.campoTipo .label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13.5px;
+    color: var(--cacau);
+}
+
+.campoTipo .label strong {
+    font-weight: 600;
+}
+
+.campo .input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--linha);
+    border-radius: var(--raio);
+    background-color: var(--branco);
+    color: var(--espresso);
+    font-family: inherit;
+    font-size: 14.5px;
+    outline: none;
+}
+
+.campo .input:hover {
+    border-color: var(--latao);
+}
+
+.campo .input:focus {
+    border-color: var(--cacau);
+    box-shadow: 0 0 0 4px rgba(110, 71, 59, 0.12);
+}
+
+.campo .input:disabled,
+.campo .input[readonly] {
+    background-color: var(--areia);
+    border-color: var(--areia);
+    color: var(--cacau);
+    cursor: not-allowed;
+}
+
+/* seta própria nos selects */
+.campo select.input {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236E473B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+/* botão "Gerar Senha" por baixo do campo da senha */
+.campo .botao {
+    margin-top: 10px;
+    height: 38px;
+    padding: 0 18px;
+    font-size: 13px;
+    background: transparent;
+    color: var(--cacau);
+    box-shadow: inset 0 0 0 1.5px var(--cacau);
+}
+
+.campo .botao:hover {
+    background: var(--cacau);
+    color: var(--branco);
+    transform: none;
+}
+
+/* mensagem de erro dentro do modal ("Preencha o Nome primeiro.") */
+.modalCaixa form > p,
+.erro {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: var(--ferrugem-claro);
+    border-left: 4px solid var(--ferrugem);
+    border-radius: var(--raio);
+    color: var(--ferrugem);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.acao {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* botão "Confirmar Remocao" do modal de remover */
+.acao .botao-remover {
+    height: 44px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 999px;
+    background: var(--ferrugem);
+    color: var(--branco);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 14px -6px rgba(162, 64, 47, 0.8);
+}
+
+.acao .botao-remover:hover {
+    background: #7F2F21;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   Animações
+   ========================================================= */
+@keyframes aparecer {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes subir {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* =========================================================
+   Responsivo
+   ========================================================= */
+@media (max-width: 1100px) {
+    .mae {
+        padding: 36px 28px;
+    }
+
+    .cabecalho h1 {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .navbar {
+        width: 100%;
+        height: auto;
+        position: static;
+        padding: 20px 0 14px;
+    }
+
+    .marca {
+        padding: 0 22px 16px;
+    }
+
+    .marca .titulo br {
+        display: none;
+    }
+
+    .navlinks {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 0 12px;
+    }
+
+    .navbar a {
+        padding: 9px 14px;
+    }
+
+    .navbar .sair {
+        margin: 10px 12px 0;
+        align-self: flex-start;
+    }
+
+    .mae {
+        padding: 28px 16px;
+    }
+
+    .caixa {
+        padding: 8px 14px 14px;
+    }
+}
+
+@media (max-width: 520px) {
+    .cabecalho h1 {
+        font-size: 28px;
+    }
+
+    .busca,
+    .busca input,
+    .topo .botao {
+        width: 100%;
+    }
+
+    .modalCaixa {
+        padding: 24px 20px;
+    }
+
+    .modalTopo .titulo {
+        font-size: 22px;
+    }
+}
+
+/* =========================================================
+   Tela principal
+   ========================================================= */
+.boasVindas {
+    margin-top: 6px;
+    color: var(--texto-suave);
+    font-size: 15px;
+}
+
+.cartoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.cartoes .cartao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 22px 24px;
+    background: var(--papel);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card);
+}
+
+.cartao .rotulo {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.cartao .numero {
+    font-family: var(--fonte-titulo);
+    font-size: 44px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--espresso);
+}
+
+.cartao a {
+    margin-top: 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cacau);
+    text-decoration: none;
+}
+
+.cartao a:hover {
+    color: var(--ferrugem);
+    text-decoration: underline;
+}
+
+.erro {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: var(--ferrugem-claro);
+    border-left: 4px solid var(--ferrugem);
+    border-radius: 10px;
+    color: var(--ferrugem);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   Utilizador logado (menu lateral)
+   ========================================================= */
+.navbar .utilizador {
+    margin: 14px 14px 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(225, 212, 194, 0.09);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.navbar .utilizador .utilizadorNome {
+    color: var(--branco);
+    font-size: 14.5px;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+/* link do menu sem permissao */
+.navbar a.desativado {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
