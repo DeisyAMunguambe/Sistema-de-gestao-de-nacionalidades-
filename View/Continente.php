@@ -131,16 +131,18 @@
                 <h2 class="titulo">Novo Continente</h2>
                 <a href="#" class="modalFechar">x</a>
             </div>
-            <form method="post" action="Continente.php" id="formNovo">
-                <div class="campo">
-                    <div class="campoTipo"><label class="label"><strong>Nome do continente</strong></label></div>
-                    <input id="nome" type="text" name="nome" class="input" />
-                    <div id="erros-novo" style="display:none; color:red;"></div>
+            <form method="post" action="Continente.php" id="formNovo"  onsubmit="return processarCadastro()">
+            <div class="campo">
+                <div class="campoTipo">
+                    <label class="label"> <strong>Nome do continente</strong></label>
                 </div>
-                <div class="acao">
-                    <button type="submit" name="gravar" class="botao" onclick="processarCadastro()">Guardar </button>
-                </div>
-              </form>
+                <input id="nome" type="text" name="nome" class="input" />
+                <div id="erros-novo" style="display:none; color:red;"></div>
+            </div>
+            <div class="acao">
+                <button type="submit" name="gravar" class="botao">Guardar </button>
+            </div>
+        </form>
             </div>
         </div>
             
@@ -156,18 +158,20 @@
                         <a href="#" class="modalFechar">x</a>
                     </div>
 
-                    <form method="post" action="Continente.php" id="formEditar">
-                        <input type="hidden" name="id" value="<?= $continente->getCodigoContinente(); ?>" />
-                        <div class="campo">
-                            <div class="campoTipo">
-                                <label class="label"><strong>Nome do continente</strong></label>
-                            </div>
-                            <input type="text" name="nomeEditar" class="input" id="nomeEditar" value="<?= ($continente->getNomeContinente()) ?>" />
+                   <form method="post" action="Continente.php"id="formNovo" onsubmit="return processarCadastro()">
+
+                    <div class="campo">
+                        <div class="campoTipo">
+                            <label class="label"> <strong>Nome do continente</strong>  </label>
                         </div>
-                        <div class="acao">
-                            <button type="submit" class="botao" onclick="processarEdicao()" name="actualizar">Guardar</button>
-                        </div>
-                    </form>
+                        <input id="nome" type="text" name="nome" class="input" />
+                        <div id="erros-novo" style="display:none; color:red;"></div>
+                    </div>
+
+                    <div class="acao">
+                        <button type="submit" name="gravar" class="botao"> Guardar</button>
+                    </div>
+                </form>
 
                 </div>
             </div>

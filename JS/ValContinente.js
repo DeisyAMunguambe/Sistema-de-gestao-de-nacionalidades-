@@ -1,4 +1,3 @@
-
 // CLASSE PARA TRATAR ERROS DE VALIDAÇÃO
 class ErroValidacao extends Error {
     constructor(mensagem) {
@@ -27,7 +26,6 @@ function validarContinente(valor) {
     }
 
     for (let caractere of valor.trim()) {
-
         if (!caractere.match(/[a-zA-ZÀ-ÿ\s'-]/)) {
             throw new ErroValidacao(
                 "O nome do continente não pode conter números ou caracteres especiais."
@@ -42,16 +40,15 @@ function validarContinente(valor) {
 function processarCadastro() {
 
     let erros = [];
+    const campoNome = document.getElementById("nome");
+    const caixaErros = document.getElementById("erros-novo");
+
+    caixaErros.style.display = "none";
+    caixaErros.innerHTML = "";
 
     try {
-
-        let nome;
-
         try {
-            nome = validarContinente(
-                document.getElementById("nome").value
-            );
-
+            validarContinente(campoNome.value);
         } catch (erro) {
             erros.push(erro.message);
         }
@@ -60,33 +57,34 @@ function processarCadastro() {
             throw new ErroValidacao(erros.join("\n"));
         }
 
-        // Se não existirem erros, permite o envio
-        document.getElementById("formNovo").submit();
+        return true;
 
     } catch (erro) {
 
-        document.getElementById("erros-novo").innerHTML =
+        caixaErros.innerHTML =
             "<strong>Erros encontrados:</strong><br>" +
             erro.message.replace(/\n/g, "<br>");
 
-        document.getElementById("erros-novo").style.display = "block";
+        caixaErros.style.display = "block";
+
+        return false;
     }
 }
 
 // PROCESSAR EDIÇÃO
-function processarEdicao() {
+function processarEdicao(id) {
 
     let erros = [];
 
+    const campoNome = document.getElementById("nomeEditar" + id);
+    const caixaErros = document.getElementById("erros-editar" + id);
+
+    caixaErros.style.display = "none";
+    caixaErros.innerHTML = "";
+
     try {
-
-        let nome;
-
         try {
-            nome = validarContinente(
-                document.getElementById("nomeEditar").value
-            );
-
+            validarContinente(campoNome.value);
         } catch (erro) {
             erros.push(erro.message);
         }
@@ -95,14 +93,16 @@ function processarEdicao() {
             throw new ErroValidacao(erros.join("\n"));
         }
 
-        document.getElementById("formEditar").submit();
+        return true;
 
     } catch (erro) {
 
-        document.getElementById("erros-editar").innerHTML =
+        caixaErros.innerHTML =
             "<strong>Erros encontrados:</strong><br>" +
             erro.message.replace(/\n/g, "<br>");
 
-        document.getElementById("erros-editar").style.display = "block";
+        caixaErros.style.display = "block";
+
+        return false;
     }
 }
