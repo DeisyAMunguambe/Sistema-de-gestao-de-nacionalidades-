@@ -368,6 +368,15 @@ tbody td:nth-child(2) {
     font-size: 12.5px;
     font-weight: 700;
 }
+#erros-novo,
+#erros-editar {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}
 
 /* =========================================================
    Botões de ação da tabela
