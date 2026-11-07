@@ -131,7 +131,7 @@
                 <h2 class="titulo">Novo Continente</h2>
                 <a href="#" class="modalFechar">x</a>
             </div>
-            <form method="post" action="Continente.php">
+            <form method="post" action="Continente.php" id="formNovo">
                 <div class="campo">
                     <div class="campoTipo"><label class="label"><strong>Nome do continente</strong></label></div>
                     <input id="nome" type="text" name="nome" class="input" />
@@ -156,7 +156,7 @@
                         <a href="#" class="modalFechar">x</a>
                     </div>
 
-                    <form method="post" action="Continente.php">
+                    <form method="post" action="Continente.php" id="formEditar">
                         <input type="hidden" name="id" value="<?= $continente->getCodigoContinente(); ?>" />
                         <div class="campo">
                             <div class="campoTipo">
