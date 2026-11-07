@@ -42,6 +42,7 @@
         <title>Listar Pessoa</title>
 
         <link rel="stylesheet" href="../assets/estilo.css">
+        <script src="../JS/ValPessoa.js" ></script>
     </head>
 
     <body>
@@ -139,97 +140,116 @@
                         <h2 class="titulo">Nova Pessoa</h2>
                         <a href="#" class="modalFechar">x</a>
                     </div>
-                    <form method="post" action="Pessoa.php">
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Nome</strong></label></div>
-                            <input type="text" name="nome" class="input" />
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Apelido</strong></label></div>
-                            <input type="text" name="apelido" class="input" />
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label" for="genero"><strong>Genero</strong></label></div>
-                            <select class="input" id="genero" name="genero" required>
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Feminino">Feminino</option>
-                                <option value="Outro">Outro</option>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label" for="estadoCivil"><strong>Estado Civil</strong></label></div>
-                            <select class="input" id="estadoCivil" name="estado_civil" required>
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="Solteiro">Solteiro(a)</option>
-                                <option value="Casado">Casado(a)</option>
-                                <option value="Divorciado">Divorciado(a)</option>
-                                <option value="Viúvo">Viúvo(a)</option>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Ano de Nascimento</strong></label></div>
-                            <input type="text" name="ano_nascimento" class="input" />
-                        </div>
-                        <div class="acao">
-                            <button type="submit" name="gravar" class="botao">Guardar</button>
-                        </div>
-                    </form>
+                   <form method="post" action="Pessoa.php" onsubmit="return processarCadastro()">
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Nome</strong></label>
+                    </div>
+                    <input type="text" name="nome" id="nome" class="input" />
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Apelido</strong></label>
+                    </div>
+                    <input type="text" name="apelido" id="apelido" class="input" />
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Género</strong></label>
+                    </div>
+                    <select class="input" id="genero" name="genero">
+                        <option value="">Selecione</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Estado Civil</strong></label>
+                    </div>
+                    <select class="input" id="estadoCivil" name="estado_civil">
+                        <option value="">Selecione</option>
+                        <option value="Solteiro">Solteiro(a)</option>
+                        <option value="Casado">Casado(a)</option>
+                        <option value="Divorciado">Divorciado(a)</option>
+                        <option value="Viúvo">Viúvo(a)</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Ano de Nascimento</strong></label>
+                    </div>
+                    <input type="text" name="ano_nascimento" id="anoNascimento" class="input" />
+                </div>
+                <div id="erros-novo"
+                    style="display:none; color:red; margin-top:10px;">
+                </div>
+                <div class="acao">
+                    <button type="submit" name="gravar" class="botao">Guardar </button>
+                </div>
+            </form>
                 </div>
             </div>
 
             <!-- MODAL: editar dados da pessoa -->
-            <?php foreach ($pessoas as $pessoa) { ?>
-            <div class="modalFundo" id="editar-<?= $pessoa->getCodigo() ?>">
-                <a href="#" class="modalOverlay" aria-label="Fechar"></a>
-                <div class="modalCaixa">
-                    <div class="modalTopo">
-                        <h2 class="titulo">Editar Pessoa</h2>
-                        <a href="#" class="modalFechar">x</a>
-                    </div>
-                    <form method="post">
-                        <input type="hidden" name="id" value="<?= $pessoa->getCodigo() ?>" />
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Nome</strong></label></div>
-                            <input type="text" name="nomeEditar" class="input" value="<?= $pessoa->getNome() ?>" />
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Apelido</strong></label></div>
-                            <input type="text" name="apelidoEditar" class="input" value="<?= $pessoa->getApelido() ?>" />
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Genero</strong></label></div>
-                            <select class="input" name="generoEditar" required>
-                                <option value="Masculino" <?= $pessoa->getGenero() == "Masculino" ? "selected" : "" ?>>Masculino</option>
-                                <option value="Feminino" <?= $pessoa->getGenero() == "Feminino" ? "selected" : "" ?>>Feminino</option>
-                                <option value="Outro" <?= $pessoa->getGenero() == "Outro" ? "selected" : "" ?>>Outro</option>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Estado Civil</strong></label></div>
-                            <select class="input" name="estado_civilEditar" required>
-                                <option value="Solteiro" <?= $pessoa->getEstadoCivil() == "Solteiro" ? "selected" : "" ?>>Solteiro(a)</option>
-                                <option value="Casado" <?= $pessoa->getEstadoCivil() == "Casado" ? "selected" : "" ?>>Casado(a)</option>
-                                <option value="Divorciado" <?= $pessoa->getEstadoCivil() == "Divorciado" ? "selected" : "" ?>>Divorciado(a)</option>
-                                <option value="Viúvo" <?= $pessoa->getEstadoCivil() == "Viúvo" ? "selected" : "" ?>>Viúvo(a)</option>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Ano de Nascimento</strong></label></div>
-                            <input type="text" name="ano_nascimentoEditar" class="input" value="<?= $pessoa->getAnoNascimento() ?>" />
-                        </div>
-                        <div class="campo">
-                            <div class="campoTipo"><label class="label"><strong>Idade</strong></label></div>
-                            <input type="text" class="input" value="<?= $pessoa->calcularIdade() ?>" disabled />
-                        </div>
-                        <div class="acao">
-                            <button type="submit" name="actualizar" class="botao">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <?php } ?>
+           <?php foreach ($pessoas as $pessoa) {  $id = $pessoa->getCodigo();  ?>
+            <form method="post" action="Pessoa.php" onsubmit="return processarEdicao(<?= $id ?>)">
 
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Nome</strong></label>
+                    </div>
+                    <input type="text" name="nomeEditar" id="nomeEditar<?= $id ?>" class="input" value="<?= htmlspecialchars($pessoa->getNome()) ?>" />
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo">
+                        <label class="label"><strong>Apelido</strong></label>
+                    </div>
+                    <input type="text" name="apelidoEditar"  id="apelidoEditar<?= $id ?>" class="input" value="<?= htmlspecialchars($pessoa->getApelido()) ?>" />
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo"><label class="label"><strong>Género</strong></label> </div>
+                    <select class="input" name="generoEditar" id="generoEditar<?= $id ?>">
+                        <option value="Masculino"<?= $pessoa->getGenero() == "Masculino" ? "selected" : "" ?>> Masculino</option>
+                        <option value="Feminino" <?= $pessoa->getGenero() == "Feminino" ? "selected" : "" ?>>Feminino</option>
+                        <option value="Outro" <?= $pessoa->getGenero() == "Outro" ? "selected" : "" ?>>Outro </option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <div class="campoTipo"><label class="label"><strong>Estado Civil</strong></label></div>
+                    <select class="input" name="estado_civilEditar" id="estadoCivilEditar<?= $id ?>">
+                        <option value="Solteiro" <?= $pessoa->getEstadoCivil() == "Solteiro" ? "selected" : "" ?>>Solteiro(a) </option>
+                        <option value="Casado" <?= $pessoa->getEstadoCivil() == "Casado" ? "selected" : "" ?>> Casado(a) </option>
+                        <option value="Divorciado" <?= $pessoa->getEstadoCivil() == "Divorciado" ? "selected" : "" ?>> Divorciado(a)</option>
+                        <option value="Viúvo"<?= $pessoa->getEstadoCivil() == "Viúvo" ? "selected" : "" ?>> Viúvo(a) </option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <div class="campoTipo"> <label class="label"><strong>Ano de Nascimento</strong></label></div>
+                    <input type="text" name="ano_nascimentoEditar" id="anoNascimentoEditar<?= $id ?>" class="input" value="<?= $pessoa->getAnoNascimento() ?>" />
+                </div>
+                <div class="campo">
+                    <div class="campoTipo"> <label class="label"><strong>Idade</strong></label> </div>
+                    <input type="text" class="input" value="<?= $pessoa->calcularIdade() ?>" disabled />
+                </div>
+                <div id="erros-editar<?= $id ?>"
+                    style="display:none; color:red; margin-top:10px;">
+                </div>
+                <div class="acao">
+                    <button type="submit" name="actualizar" class="botao"> Guardar </button>
+                </div>
+            </form>
+            <?php } ?>
             <!-- MODAL: confirmar remocao da pessoa -->
             <?php foreach ($pessoas as $pessoa) { ?>
             <div class="modalFundo" id="remover-<?= $pessoa->getCodigo() ?>">
