@@ -209,7 +209,15 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
                             <option value="">Selecione um país</option>
                             <?php foreach ($paises as $pais) { ?>
                                 <?php if ($pais['idcontinente'] == $novoContinente) { ?>
-                                    <option value="<?= $pais['codigoPais'] ?>" <?= $pais['codigoPais'] == $novoPais ? 'selected' : '' ?>><?= ($pais['nomePais']) ?></option>
+                                   
+                                <option
+    value="<?= htmlspecialchars($pais['codigoPais']) ?>"
+    data-continente="<?= htmlspecialchars($pais['idcontinente']) ?>"
+    <?= $pais['codigoPais'] == $novoPais ? 'selected' : '' ?>
+>
+    <?= htmlspecialchars($pais['nomePais']) ?>
+</option>
+
                                 <?php } ?>
                             <?php } ?>
                         </select>
@@ -221,7 +229,13 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
                             <option value="">Selecione uma nacionalidade</option>
                             <?php foreach ($nacionalidades as $nac) { ?>
                                 <?php if ($nac['id_pais'] == $novoPais) { ?>
-                                    <option value="<?= $nac['id_nacionalidade'] ?>" <?= $nac['id_nacionalidade'] == $novaNacionalidade ? 'selected' : '' ?>><?= ($nac['Nome']) ?></option>
+                                    <option
+    value="<?= htmlspecialchars($nac['id_nacionalidade']) ?>"
+    data-pais="<?= htmlspecialchars($nac['id_pais']) ?>"
+    <?= $nac['id_nacionalidade'] == $novaNacionalidade ? 'selected' : '' ?>
+>
+    <?= htmlspecialchars($nac['Nome']) ?>
+</option>
                                 <?php } ?>
                             <?php } ?>
                         </select>
@@ -237,8 +251,13 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
                     </div>
                     <div class="campo">
                         <div class="campoTipo"><label class="label"><strong>Data de Registo</strong></label></div>
-                        <input type="date" name="dataRegisto" class="input" value="<?= ($novaData) ?>" required>
-                    </div>
+<input
+    type="date"
+    name="dataRegisto"
+    class="input"
+    value="<?= htmlspecialchars($novaData, ENT_QUOTES, 'UTF-8') ?>"
+    required
+>                    </div>
                     <div class="campo">
                         <div class="campoTipo"><label class="label"><strong>Motivo</strong></label></div>
                         <select name="motivo" class="input" required>
@@ -325,8 +344,13 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
                         </div>
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>Data de Registo</strong></label></div>
-                            <input type="date" name="dataRegistoEditar" class="input" value="<?= ($editData) ?>" required>
-                        </div>
+<input
+    type="date"
+    name="dataRegistoEditar"
+    class="input"
+    value="<?= htmlspecialchars($editData, ENT_QUOTES, 'UTF-8') ?>"
+    required
+>                        </div>
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>Motivo</strong></label></div>
                             <select name="motivoEditar" class="input" required>
@@ -355,11 +379,11 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
                         <input type="hidden" name="id" value="<?= $registo->getCodigoRegisto() ?>">
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>Pessoa</strong></label></div>
-                            <input type="text" class="input" value="<?= ($registo->getNomePessoa()) ?>" disabled>
+                            <input type="text" class="input" value="<?= htmlspecialchars($registo->getNomePessoa(), ENT_QUOTES, 'UTF-8') ?>" disabled>
                         </div>
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>Nacionalidade</strong></label></div>
-                            <input type="text" class="input" value="<?= ($registo->getNomeNacionalidade() . " (" . $registo->getNomePais() . ")") ?>" disabled>
+                            <input type="text" class="input" value="<?= htmlspecialchars($registo->getNomeNacionalidade() . " (" . $registo->getNomePais() . ")", ENT_QUOTES, 'UTF-8') ?>" disabled>
                         </div>
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>Motivo</strong></label></div>
@@ -371,6 +395,6 @@ if (!registoNacionalidadeDoPais($nacionalidades, $novaNacionalidade, $novoPais))
             </div>
         <?php } ?>
     </div>
-
+<script src="../assets/ValRegisto.js"></script>
 </body>
 </html>

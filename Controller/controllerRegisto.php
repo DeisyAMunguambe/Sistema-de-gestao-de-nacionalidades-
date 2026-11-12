@@ -90,24 +90,170 @@ function encontrarRegisto($codigoRegisto) {
     return $registo;
 }
 
-function validarRegisto($registo, $codigoRegisto) {
-    global $conexao;
-    $idContinente =  $registo->getIdContinente();
-    $idPais =  $registo->getIdPais();
-    $idNacionalidade =$registo->getIdNacionalidade();
-    $idPessoa =  $registo->getIdPessoa();
 
-    $sql = "select id_registo
-            from registo_nacionalidade
-            where id_pessoa = $idPessoa
-            and id_nacionalidade = $idNacionalidade
-            and id_registo <> $codigoRegisto";
-    $result = mysqli_query($conexao, $sql);
-    if ($result && mysqli_num_rows($result) > 0) {
-        return "Esta pessoa já tem esta nacionalidade registada";
+function validarRegisto($registo, $codigoRegisto) {
+
+    global $conexao;
+
+    $idContinente = (int)$registo->getIdContinente();
+    $idPais = (int)$registo->getIdPais();
+    $idNacionalidade = (int)$registo->getIdNacionalidade();
+    $idPessoa = (int)$registo->getIdPessoa();
+
+    $dataRegisto = $registo->getDataRegisto();
+    $motivo = $registo->getMotivo();
+
+    // 1. Validar os identificadores.
+    if (
+        $idContinente <= 0 ||
+        $idPais <= 0 ||
+        $idNacionalidade <= 0 ||
+        $idPessoa <= 0
+    ) {
+        return "Seleccione correctamente todos os campos obrigatórios.";
     }
+
+    // 2. Validar a data.
+    if (
+        !is_string($dataRegisto) ||
+        !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dataRegisto)
+    ) {
+        return "Introduza uma data válida.";
+    }
+
+    $data = DateTime::createFromFormat('!Y-m-d', $dataRegisto);
+    $errosData = DateTime::getLastErrors();
+
+    if (
+        !$data ||
+        ($errosData !== false &&
+        ($errosData['warning_count'] > 0 ||
+         $errosData['error_count'] > 0)) ||
+        $data->format('Y-m-d') !== $dataRegisto
+    ) {
+        return "A data introduzida não é válida.";
+    }
+
+    // 3. Aceitar exclusivamente a data actual de Maputo.
+    $hoje = new DateTime(
+        'today',
+        new DateTimeZone('Africa/Maputo')
+    );
+
+    if ($dataRegisto !== $hoje->format('Y-m-d')) {
+        return "A data de registo deve ser exclusivamente a data actual.";
+    }
+
+    // 4. Validar o motivo.
+    $motivosPermitidos = [
+        "Casamento",
+        "Naturalidade",
+        "Naturalização",
+        "Filiação",
+        "Residência",
+        "Outro"
+    ];
+
+    if (!in_array($motivo, $motivosPermitidos, true)) {
+        return "Seleccione um motivo válido.";
+    }
+
+    // 5. Confirmar a relação continente, país e nacionalidade.
+    $sql = "SELECT p.codigoPais
+            FROM continente c
+            INNER JOIN pais p
+                ON p.idcontinente = c.codigoContinente
+            INNER JOIN nacionalidade n
+                ON n.id_pais = p.codigoPais
+            WHERE c.codigoContinente = ?
+            AND p.codigoPais = ?
+            AND n.id_nacionalidade = ?";
+
+    $stmt = mysqli_prepare($conexao, $sql);
+
+    if (!$stmt) {
+        return "Erro ao validar os dados.";
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idContinente,
+        $idPais,
+        $idNacionalidade
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $valido = mysqli_num_rows($resultado) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    if (!$valido) {
+        return "O país ou a nacionalidade não correspondem ao continente seleccionado.";
+    }
+
+    // 6. Confirmar se a pessoa existe.
+    $sql = "SELECT codigo FROM pessoa WHERE codigo = ?";
+
+    $stmt = mysqli_prepare($conexao, $sql);
+
+    if (!$stmt) {
+        return "Erro ao verificar a pessoa.";
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $idPessoa);
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $existePessoa = mysqli_num_rows($resultado) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    if (!$existePessoa) {
+        return "A pessoa seleccionada não existe.";
+    }
+
+    // 7. Impedir duplicação de nacionalidade.
+    $codigoRegisto = (int)$codigoRegisto;
+
+    $sql = "SELECT id_registo
+            FROM registo_nacionalidade
+            WHERE id_pessoa = ?
+            AND id_nacionalidade = ?
+            AND id_registo <> ?
+            LIMIT 1";
+
+    $stmt = mysqli_prepare($conexao, $sql);
+
+    if (!$stmt) {
+        return "Erro ao verificar registos duplicados.";
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idPessoa,
+        $idNacionalidade,
+        $codigoRegisto
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $duplicado = mysqli_num_rows($resultado) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    if ($duplicado) {
+        return "Esta pessoa já tem esta nacionalidade registada.";
+    }
+
     return "";
 }
+
+
 
 function criarRegisto($registo) {
     exigirPermissaoAutomatica("criar");
@@ -116,8 +262,8 @@ function criarRegisto($registo) {
     if ($erro != "") {
         return $erro;
     }
-    $data = ($conexao, $registo->getDataRegisto());
-    $motivo = ($conexao, $registo->getMotivo());
+    $data = mysqli_real_escape_string($conexao, $registo->getDataRegisto());
+    $motivo = mysqli_real_escape_string($conexao, $registo->getMotivo());
     $sql = "insert into registo_nacionalidade (id_continente, id_pais, id_nacionalidade,
             id_pessoa, dataRegisto, motivo)
             values ( " . $registo->getIdContinente() . ", " . $registo->getIdPais() . ",
@@ -139,8 +285,8 @@ function editarRegisto($registo) {
         return $erro;
     }
 
-    $data = ($conexao, $registo->getDataRegisto());
-    $motivo = ($conexao, $registo->getMotivo());
+    $data = mysqli_real_escape_string($conexao, $registo->getDataRegisto());
+    $motivo = mysqli_real_escape_string($conexao, $registo->getMotivo());
 
     $sql = "update registo_nacionalidade set
             id_continente = " . $registo->getIdContinente() . ",
