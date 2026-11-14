@@ -257,7 +257,7 @@
                         <a href="#" class="modalFechar">x</a>
                     </div>
                     <form method="post">
-                       
+                        <input type="hidden" name="id" value="<?= $pessoa->getCodigo() ?>" />
                         <div class="campo">
                             <div class="campoTipo"><label class="label"><strong>ID</strong></label></div>
                             <input type="text" class="input" value="<?= $pessoa->getCodigo() ?>" disabled />
